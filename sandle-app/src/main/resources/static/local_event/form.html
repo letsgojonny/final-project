@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>SANDLE - 산들산들</title>
+  </head>
+  <body>
+    <h1>지역행사 게시판</h1>
+
+    <div>
+      <form id="local-form" method="post" enctype="multipart/form-data">
+        <table border="1">
+          <tr>
+            <th>제목</th>
+            <td><input type="text" name="title" /></td>
+          </tr>
+          <tr>
+            <th>내용</th>
+            <td><textarea name="content" rows="10" cols="60"></textarea></td>
+          </tr>
+          <tr>
+            <th>태그명</th>
+            <td><textarea name="tag" rows="1" cols="60"></textarea></td>
+          </tr>
+          <tr>
+            <th>기간</th>
+            <td><textarea name="period" rows="1" cols="60"></textarea></td>
+          </tr>
+          <tr>
+            <th>우편주소</th>
+            <td><textarea name="postno" rows="1" cols="60"></textarea></td>
+          </tr>
+          <tr>
+            <th>기본주소</th>
+            <td>
+              <textarea name="basic-address" rows="1" cols="60"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <th>상세주소</th>
+            <td>
+              <textarea name="detail-address" rows="1" cols="60"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <th>첨부파일</th>
+            <td>
+              <input type="file" name="files" multiple />
+            </td>
+          </tr>
+        </table>
+
+        <div>
+          <button id="btn-insert" type="button">등록</button>
+          <button id="btn-cancel" type="button">취소</button>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      document.querySelector("#btn-insert").onclick = function () {
+        const form = document.querySelector("#local-form");
+        const formData = new FormData(form);
+
+        fetch("../locals", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((result) => {
+            if (result.status == "success") {
+              location.href = "index.html";
+            } else if (result.errorCode == "401") {
+              // location.href = "../auth/form.html";
+              location.reload;
+            } else {
+              alert("입력 실패!");
+            }
+          })
+          .catch((exception) => {
+            alert("입력 오류!");
+            console.log(exception);
+          });
+      };
+
+      document.querySelector("#btn-cancel").onclick = function () {
+        location.href = "index.html";
+      };
+    </script>
+  </body>
+</html>

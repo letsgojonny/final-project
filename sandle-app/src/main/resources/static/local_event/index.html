@@ -12,16 +12,15 @@
       name="viewport"
       content="width=device-width, initial-scale=1, user-scalable=no"
     />
-    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
   </head>
   <body class="homepage is-preload">
     <div id="page-wrapper">
       <!-- Header -->
       <section id="header">
         <!-- Logo -->
-        <h1><a href="index.html">SANDLE</a></h1>
+        <h1><a href="../index.html">SANDLE</a></h1>
 
-        <!-- <div id="login"><a href="auth/login_form.html">LOGIN</a></div> -->
         <div id="login">
           <a href="auth/login_form.html">LOGIN</a>
         </div>
@@ -29,13 +28,13 @@
           <a><span id="username"></span></a>
           <a href="" onclick="logout(); return false;"> (LOGOUT2) </a>
         </div>
-
         <div id="sign-up"><a href="member/member.html">SIGN UP</a></div>
+
         <!-- Nav -->
         <nav id="nav">
           <ul>
             <li class="current">
-              <a href="index.html">산들 소개</a>
+              <a href="../index.html">산들 소개</a>
               <ul>
                 <ol>
                   산들 소개
@@ -64,7 +63,7 @@
                 </ol>
                 <li><a href="#">공지 사항</a></li>
                 <li><a href="#">산들 뉴스</a></li>
-                <li><a href="local_event/index.html">지역 행사 정보</a></li>
+                <li><a href="#">지역 행사 정보</a></li>
                 <li><a href="#">이벤트</a></li>
               </ul>
             </li>
@@ -84,59 +83,34 @@
           </ul>
         </nav>
 
-        <!-- Banner -->
-        <section id="banner"></section>
-
         <!-- Intro -->
-        <section id="intro" class="container">
-          <div class="row">
-            <div class="col-6">
-              <section class="first">
-                <a href="#"
-                  ><img src="images/main_image_1.jpg" id="main-images"
-                /></a>
-                <header>
-                  <a href="#"><h2>전국 등산로 정보</h2></a>
-                </header>
-                <p>전국 등산로를 한번에 찾아 보세요</p>
-              </section>
-            </div>
-            <div class="col-6">
-              <section class="middle">
-                <a href="#"
-                  ><img src="images/main_image_2.jpg" id="main-images"
-                /></a>
-                <header>
-                  <a href="#"><h2>커뮤니티</h2></a>
-                </header>
-                <p>등산했던 산과 여러 정보를 공유해보세요</p>
-              </section>
-            </div>
-            <div class="col-6">
-              <section class="middle">
-                <a href="#"
-                  ><img src="images/main_image_3.jpg" id="main-images"
-                /></a>
-                <header>
-                  <a href="#"><h2>산악 소식</h2></a>
-                </header>
-                <p>산들산들만의 산악뉴스를 통해 빠르게 소식을 받아보세요</p>
-              </section>
-            </div>
-            <div class="col-6">
-              <section class="last">
-                <a href="#"
-                  ><img src="images/main_image_4.jpg" id="main-images"
-                /></a>
-                <header>
-                  <a href="#"><h2>이벤트 정보</h2></a>
-                </header>
-                <p>지역 행사정보나 근처여행 맛집 정보까지 알려드립니다.</p>
-              </section>
-            </div>
-          </div>
-        </section>
       </section>
+
+      <div>
+        <a href="form.html">지역행사 추가하기</a>
+        <table id="local-table" border="1">
+          <thead>
+            <tr>
+              <th>번호</th>
+              <th>제목</th>
+              <th>내용</th>
+              <th>닉네임</th>
+              <th>태그명</th>
+              <th>작성일</th>
+              <th>기간</th>
+              <th>우편주소</th>
+              <th>기본주소</th>
+              <th>상세주소</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+
+        <form action="list" method="get">
+          <input type="text" name="keyword" value="" />
+          <button>검색</button>
+        </form>
+      </div>
 
       <!-- Footer -->
       <section id="footer">
@@ -192,11 +166,51 @@
     </div>
 
     <!-- Scripts -->
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/jquery.dropotron.min.js"></script>
-    <script src="assets/js/browser.min.js"></script>
-    <script src="assets/js/breakpoints.min.js"></script>
-    <script src="assets/js/util.js"></script>
-    <script src="assets/js/main.js"></script>
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/jquery.dropotron.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+
+    <script id="tr-template" type="text/x-handlebars-template">
+      {{#each this}}
+        <tr>
+          <td>{{no}}</td>
+          <td><a href="view.html?no={{no}}">
+              {{#if title}}{{title}}{{else}}제목없음{{/if}}</a></td>
+          <td>{{content}}</td>
+          <td>{{nickname}}</td>
+          <td>{{tag}}</td>
+          <td>{{createdDate}}</td>
+          <td>{{period}}</td>
+          <td>{{postno}}</td>
+          <td>{{basicAddress}}</td>
+          <td>{{detailAddress}}</td>
+        </tr>
+      {{/each}}
+    </script>
+
+    <script>
+      // 템플릿으로 사용할 HTML을 준비한다.
+      const html = document.querySelector("#tr-template").innerHTML;
+
+      // HTML을 가지고 템플릿 엔진을 생성한다.
+      const templateEngine = Handlebars.compile(html);
+
+      fetch("../locals")
+        .then((response) => {
+          return response.json();
+          // json()은 Promise 객체를 리턴한다.
+          // Promise 객체가 하는 일:
+          //   - 서버에서 응답 콘텐트를 받는 일을 한다.
+          //   - 서버에서 받은 JSON 포맷의 문자열을 JavaScript 객체로 변환한다.
+          //   - resolve()를 호출하여 다음 Promise 객체에 작업이 완료됐음을 통지한다.
+          //     이때 변환된 JavaScript를 객체를 파라미터로 전달한다.
+        })
+        .then((result) => {
+          document.querySelector("#local-table > tbody").innerHTML =
+            templateEngine(result.data);
+        });
+    </script>
   </body>
 </html>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bitcamp.myapp.dao.LocalDao">
+
+  <resultMap type="local" id="localMap">
+    <id column="board_id" property="no"/>
+    <result column="title" property="title"/>
+    <result column="content" property="content"/>
+    <result column="tag" property="tag"/>
+    <result column="created_date" property="createdDate"/>
+    <result column="period" property="period"/>
+    <result column="post_no" property="postno"/>
+    <result column="basic_address" property="basicAddress"/>
+    <result column="detail_address" property="detailAddress"/>
+  </resultMap>
+
+  <insert id="insert" parameterType="local" 
+          useGeneratedKeys="true" keyProperty="no" keyColumn="board_id">
+    insert into hms_local_event(
+      board_id,
+      period, 
+      post_no, 
+      basic_address, 
+      detail_address)
+    values(
+      #{no},
+      #{period},
+      #{postno}, 
+      #{basicAddress}, 
+      #{detailAddress})
+  </insert>
+
+  <select id="findAll" resultMap="localMap">
+    select 
+      m.nickname,
+      l.period, 
+      b.title,
+      b.tag,
+      b.created_date
+    from 
+      hms_board b
+      inner join hms_local_event l on b.board_id = l.board_id
+      inner join hms_member m on b.member_id = m.member_id
+    <if test="keyword != '' and keyword != null">
+    where
+      b.title like(concat('%', #{keyword}, '%'))
+      or b.content like(concat('%', #{keyword}, '%'))
+      or b.tag like(concat('%', #{keyword}, '%'))
+      or m.nickname like(concat('%', #{keyword}, '%'))
+      or l.basic_address like(concat('%', #{keyword}, '%'))
+    </if>
+    order by 
+      l.period desc
+  </select>
+
+  <select id="findByNo" parameterType="int" resultMap="localMap">
+    select 
+      l.*,
+      m.nickname, 
+      b.title, 
+      b.content, 
+      b.tag,
+      b.created_date
+    from 
+      hms_local_event l
+      inner join hms_board b on b.board_id = l.board_id
+      inner join hms_member m on b.member_id = m.member_id
+    where 
+      l.board_id=#{no}
+  </select>
+  
+  <update id="update" parameterType="local">
+    update hms_local_event set
+      period=#{period}, 
+      post_no=#{postno}, 
+      basic_address=#{basicAddress}, 
+      detail_address=#{detailAddress}
+    where board_id=#{no}
+  </update>
+  
+  <delete id="delete" parameterType="int">
+    delete from hms_local_event
+    where board_id=#{no}
+  </delete>
+</mapper>
+
+
+
+
+

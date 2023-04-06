@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bitcamp.myapp.dao.BoardDao">
+
+  <resultMap type="board" id="boardMap">
+    <id column="board_id" property="no"/>
+    <result column="board_category_id" property="boardCategoryNo"/>
+    <result column="member_id" property="memberNo"/>
+    <result column="title" property="title"/>
+    <result column="content" property="content"/>
+    <result column="tag" property="tag"/>
+    <result column="created_date" property="createdDate"/>
+  </resultMap>
+
+  <insert id="insert" parameterType="board" 
+          useGeneratedKeys="true" keyProperty="no" keyColumn="board_id">
+    insert into hms_board(
+      board_category_id,
+      member_id, 
+      title, 
+      content, 
+      tag)
+    values(
+      #{boardCategoryNo},
+      #{memberNo},
+      #{title}, 
+      #{content}, 
+      #{tag})
+  </insert>
+
+  <select id="findAll" resultMap="boardMap">
+    select 
+      c.board_name,
+      m.nickname, 
+      b.title, 
+      b.tag,
+      b.created_date
+    from 
+      hms_board b
+      inner join hms_board_category c on b.board_category_id = c.board_category_id
+      inner join hms_member m on b.member_id = m.member_id
+    <if test="keyword != '' and keyword != null">
+    where
+      b.title like(concat('%', #{keyword}, '%'))
+      or b.content like(concat('%', #{keyword}, '%'))
+      or b.tag like(concat('%', #{keyword}, '%'))
+      or m.nickname like(concat('%', #{keyword}, '%'))
+    </if>
+    order by 
+      b.board_id desc
+  </select>
+
+  <select id="findByNo" parameterType="int" resultMap="boardMap">
+    select 
+      c.board_name,
+      m.nickname, 
+      b.title, 
+      b.content, 
+      b.tag,
+      b.created_date
+    from 
+      hms_board b
+      inner join hms_board_category c on b.board_category_id = c.board_category_id
+      inner join hms_member m on b.member_id = m.member_id
+    where 
+      b.board_id=#{no}
+  </select>
+  
+  <update id="update" parameterType="board">
+    update hms_board set
+      title=#{title},
+      content=#{content},
+      tag=#{tag}
+    where board_id=#{no}
+  </update>
+  
+  <delete id="delete" parameterType="int">
+    delete from hms_board
+    where board_id=#{no}
+  </delete>
+</mapper>
+
+
+
+
+
