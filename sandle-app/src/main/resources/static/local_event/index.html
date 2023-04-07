@@ -103,7 +103,7 @@
 
         <form action="list" method="get">
           <input type="text" name="keyword" value="" />
-          <button>검색</button>
+          <button id="btn-search" type="button">검색</button>
         </form>
       </div>
 
@@ -172,7 +172,7 @@
         <tr>
           <td>{{nickname}}</td>
           <td><a href="view.html?no={{no}}">
-              {{#if title}}{{title}}{{else}}제목없음{{/if}}</a></td>
+              {{title}}</a></td>
           <td>{{period}}</td>
           <td>{{tag}}</td>
           <td>{{createdDate}}</td>
@@ -180,10 +180,11 @@
       {{/each}}
     </script>
 
-    <!-- <script src="../node_modules/handlebars/dist/handlebars.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/handlebars/dist/handlebars.min.js"></script>
+    <script src="index.js"></script>
+    <!-- <script src="../node_modules/handlebars/dist/handlebars.js"></script> -->
 
-    <script>
+    <!-- <script>
       // 템플릿으로 사용할 HTML을 준비한다.
       const html = document.querySelector("#tr-template").innerHTML;
 
@@ -205,7 +206,6 @@
           document.querySelector("#local-table > tbody").innerHTML =
             templateEngine(result.data);
         });
-    </script>
-    <script src="index.js"></script>
+    </script> -->
   </body>
 </html>
