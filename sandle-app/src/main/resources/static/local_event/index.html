@@ -91,16 +91,11 @@
         <table id="local-table" border="1">
           <thead>
             <tr>
-              <th>번호</th>
-              <th>제목</th>
-              <th>내용</th>
               <th>닉네임</th>
+              <th>제목</th>
+              <th>기간</th>
               <th>태그명</th>
               <th>작성일</th>
-              <th>기간</th>
-              <th>우편주소</th>
-              <th>기본주소</th>
-              <th>상세주소</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -175,20 +170,18 @@
     <script id="tr-template" type="text/x-handlebars-template">
       {{#each this}}
         <tr>
-          <td>{{no}}</td>
+          <td>{{nickname}}</td>
           <td><a href="view.html?no={{no}}">
               {{#if title}}{{title}}{{else}}제목없음{{/if}}</a></td>
-          <td>{{content}}</td>
-          <td>{{nickname}}</td>
+          <td>{{period}}</td>
           <td>{{tag}}</td>
           <td>{{createdDate}}</td>
-          <td>{{period}}</td>
-          <td>{{postno}}</td>
-          <td>{{basicAddress}}</td>
-          <td>{{detailAddress}}</td>
         </tr>
       {{/each}}
     </script>
+
+    <!-- <script src="../node_modules/handlebars/dist/handlebars.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/handlebars/dist/handlebars.min.js"></script>
 
     <script>
       // 템플릿으로 사용할 HTML을 준비한다.
@@ -208,9 +201,11 @@
           //     이때 변환된 JavaScript를 객체를 파라미터로 전달한다.
         })
         .then((result) => {
+          console.log(result.data);
           document.querySelector("#local-table > tbody").innerHTML =
             templateEngine(result.data);
         });
     </script>
+    <script src="index.js"></script>
   </body>
 </html>
