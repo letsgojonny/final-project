@@ -1,17 +1,22 @@
 getLocals();
 const html = document.querySelector("#tr-template").innerHTML;
 const templateEngine = Handlebars.compile(html);
-
-// document.querySelector("input[name='keyword']").onkeyup = (e) => {
-//   getLocals(e.target.value);
-// };
-
 const btnSearch = document.querySelector("#btn-search");
+const searchInput = document.querySelector('input[name="keyword"]');
 
+// 검색버튼 클릭시 검색
 btnSearch.onclick = () => {
   const keyword = document.querySelector("input[name='keyword']").value;
   getLocals(keyword);
 };
+
+// 엔터 버튼 입력 시 검색
+searchInput.addEventListener("keypress", function (event) {
+  if (event.key === "Enter") {
+    const keyword = searchInput.value;
+    getLocals(keyword);
+  }
+});
 
 function getLocals(keyword) {
   let qs = "";
@@ -29,4 +34,10 @@ function getLocals(keyword) {
         result.data
       );
     });
+}
+
+function saveLocalNo(event, localNo) {
+  event.preventDefault();
+  localStorage.setItem("localNo", localNo);
+  window.location.href = event.currentTarget.href;
 }

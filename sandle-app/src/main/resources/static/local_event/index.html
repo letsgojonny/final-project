@@ -171,7 +171,10 @@
       {{#each this}}
         <tr>
           <td>{{nickname}}</td>
-          <td><a href="view.html?no={{no}}">
+          <td><a
+              href="view.html?no={{no}}"
+              onclick="saveLocalNo(event, '{{localNo}}')"
+            >
               {{title}}</a></td>
           <td>{{period}}</td>
           <td>{{tag}}</td>

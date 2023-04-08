@@ -59,6 +59,7 @@
     select 
       l.*,
       m.nickname, 
+      b.board_id,
       b.title, 
       b.content, 
       b.tag,
