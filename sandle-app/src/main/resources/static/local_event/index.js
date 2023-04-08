@@ -2,7 +2,14 @@ getLocals();
 const html = document.querySelector("#tr-template").innerHTML;
 const templateEngine = Handlebars.compile(html);
 
-document.querySelector("#btn-search").onclick = () => {
+// document.querySelector("input[name='keyword']").onkeyup = (e) => {
+//   getLocals(e.target.value);
+// };
+
+const btnSearch = document.querySelector("#btn-search");
+
+btnSearch.onclick = () => {
+  const keyword = document.querySelector("input[name='keyword']").value;
   getLocals(keyword);
 };
 
