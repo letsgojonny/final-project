@@ -36,8 +36,8 @@ function getLocals(keyword) {
     });
 }
 
-function saveLocalNo(event, localNo) {
+function saveLocalNo(event, no) {
   event.preventDefault();
-  localStorage.setItem("localNo", localNo);
+  localStorage.setItem("no", no);
   window.location.href = event.currentTarget.href;
 }
